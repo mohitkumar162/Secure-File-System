@@ -15,7 +15,6 @@ A secure and scalable web application that allows users to upload, manage, and s
 
 📊 Admin dashboard with user and file analytics
 
-☁️ Cloud storage support (AWS S3/Local file system)
+☁️ Cloud Deployment with Cloud storage support (AWS S3/Local file system)
 
-🔁 Auto-scaling backend (if deployed on cloud)
-
+🔁 Auto-scaling backend and Load Balancer(if deployed on cloud)
