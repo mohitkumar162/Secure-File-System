@@ -117,6 +117,19 @@ def download_file(filename):
     decrypt_file(encrypted_path, decrypted_path)
     return send_file(decrypted_path, as_attachment=True)
 
+@app.route('/delete/<filename>', methods=['POST'])
+def delete_file(filename):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    filename = secure_filename(filename)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
     app.run(debug=True)
