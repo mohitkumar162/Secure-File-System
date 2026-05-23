@@ -1,0 +1,9 @@
+flask
+werkzeug
+bcrypt
+pyotp
+pycryptodome
+qrcode[pil]
+
+
+#Install all with pip install -r requirements.txt then run with python app.py
