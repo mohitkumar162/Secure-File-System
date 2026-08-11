@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secure-file-system-deployment
+  labels:
+    app: secure-file-system
+spec:
+  # Run 2 copies (replicas) of the application for high-availability
+  replicas: 2
+  selector:
+    matchLabels:
+      app: secure-file-system
+  template:
+    metadata:
+      labels:
+        app: secure-file-system
+    spec:
+      containers:
+      - name: web-app
+        # The container image name (can be locally built or pulled from registry)
+        image: secure-file-system:latest
+        imagePullPolicy: IfNotPresent # Allows Kubernetes to use local images (e.g. Minikube)
+        ports:
+        - containerPort: 5000
+        
+        # Inject sensitive environment variables from the Kubernetes Secret
+        env:
+        - name: FLASK_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: secure-file-system-secrets
+              key: FLASK_SECRET_KEY
+        - name: ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: secure-file-system-secrets
+              key: ADMIN_PASSWORD
+        - name: ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: secure-file-system-secrets
+              key: ENCRYPTION_KEY
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: secure-file-system-secrets
+              key: AWS_ACCESS_KEY_ID
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: secure-file-system-secrets
+              key: AWS_SECRET_ACCESS_KEY
+        - name: AWS_STORAGE_BUCKET_NAME
+          valueFrom:
+            secretKeyRef:
+              name: secure-file-system-secrets
+              key: AWS_STORAGE_BUCKET_NAME
+              
+        # Request and limit hardware resources (RAM & CPU) for stability
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "300m"
